@@ -7,8 +7,8 @@ import 'package:flutter/services.dart';
 import 'services/api.dart';
 
 void main() {
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent, // transparent status bar
   ));
   runApp(const MyApp());
 }
@@ -57,9 +57,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.dark,
+        statusBarColor: Colors.transparent,
+      ),
       child: Scaffold(
-        extendBodyBehindAppBar: true,
         backgroundColor: Colors.white,
         body: Stack(
           children: [
@@ -76,95 +79,99 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            Container(
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(
-                      right: 15.0,
-                      left: 15.0,
-                      top: 15.0,
+            SafeArea(
+              child: Container(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(
+                        right: 15.0,
+                        left: 15.0,
+                        top: 15.0,
+                      ),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Pokédex",
+                          style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.w900,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
                     ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "PocketDex",
+                    Container(
+                      margin: const EdgeInsets.only(
+                        right: 15.0,
+                        left: 15.0,
+                        top: 15.0,
+                        bottom: 15.0,
+                      ),
+                      child: TextField(
+                        autofocus: false,
+                        onChanged: onSearchTextChanged,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Colors.black.withOpacity(0.33),
+                          ),
+                          border: new OutlineInputBorder(
+                            borderRadius: const BorderRadius.all(
+                              const Radius.circular(100.0),
+                            ),
+                            borderSide: BorderSide(
+                              width: 0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 15.0,
+                          ),
+                          hintText: "Search for a Pokemon",
+                          filled: true,
+                          fillColor: Colors.black.withOpacity(0.075),
+                          hintStyle:
+                              TextStyle(color: Colors.black.withOpacity(0.33)),
+                        ),
                         style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.w900,
-                          color: Colors.red,
+                          color: Colors.black.withOpacity(0.66),
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(
-                      right: 15.0,
-                      left: 15.0,
-                      top: 15.0,
-                      bottom: 15.0,
-                    ),
-                    child: TextField(
-                      autofocus: false,
-                      onChanged: onSearchTextChanged,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Colors.black.withOpacity(0.33),
-                        ),
-                        border: new OutlineInputBorder(
-                          borderRadius: const BorderRadius.all(
-                            const Radius.circular(100.0),
-                          ),
-                          borderSide: BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 15.0,
-                        ),
-                        hintText: "Search for a Pokemon",
-                        filled: true,
-                        fillColor: Colors.black.withOpacity(0.075),
-                        hintStyle:
-                            TextStyle(color: Colors.black.withOpacity(0.33)),
-                      ),
-                      style: TextStyle(
-                        color: Colors.black.withOpacity(0.66),
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
+                    Expanded(
+                      child: FutureBuilder<List<dynamic>>(
+                        future: fetchPokemon(),
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
+                          if (snapshot.hasData) {
+                            return ListView.builder(
+                                padding: EdgeInsets.all(8),
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return pokemonCard(
+                                    name: snapshot.data[index]["name"]
+                                            ["english"]
+                                        .toString(),
+                                    types: snapshot.data[index]["type"],
+                                    id: snapshot.data[index]["id"],
+                                    thumbnail: snapshot.data[index]["thumbnail"]
+                                        .toString(),
+                                    primaryType: snapshot.data[index]["type"][0]
+                                        .toString(),
+                                  );
+                                });
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        },
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: FutureBuilder<List<dynamic>>(
-                      future: fetchPokemon(),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        if (snapshot.hasData) {
-                          return ListView.builder(
-                              padding: EdgeInsets.all(8),
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return pokemonCard(
-                                  name: snapshot.data[index]["name"]["english"]
-                                      .toString(),
-                                  types: snapshot.data[index]["type"],
-                                  id: snapshot.data[index]["id"],
-                                  thumbnail: snapshot.data[index]["thumbnail"]
-                                      .toString(),
-                                  primaryType: snapshot.data[index]["type"][0]
-                                      .toString(),
-                                );
-                              });
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

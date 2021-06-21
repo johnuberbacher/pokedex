@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:pokedex/services/functions.dart';
@@ -32,7 +33,12 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return AnnotatedRegion(
+      // status icon and text color, dark:black  light:white
+      value: SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.light,
+        statusBarColor: Colors.transparent,
+      ),
       child: Scaffold(
         backgroundColor: Colors.white,
         extendBodyBehindAppBar: true,
@@ -144,72 +150,74 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                       ),
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.only(
-                      top: 75.0,
-                      left: 30.0,
-                      right: 30.0,
-                    ),
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "#" + id.toString().padLeft(3, '0'),
-                          style: TextStyle(
-                            fontSize: 26,
-                            color: Colors.white.withOpacity(0.75),
-                            fontWeight: FontWeight.bold,
+                  SafeArea(
+                    child: Container(
+                      padding: const EdgeInsets.only(
+                        top: 0.0,
+                        left: 30.0,
+                        right: 30.0,
+                      ),
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "#" + id.toString().padLeft(3, '0'),
+                            style: TextStyle(
+                              fontSize: 26,
+                              color: Colors.white.withOpacity(0.75),
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        Text(
-                          name,
-                          style: const TextStyle(
-                            fontSize: 40,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                          Text(
+                            name,
+                            style: const TextStyle(
+                              fontSize: 40,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(
-                            top: 5.0,
-                          ),
-                          height: 34,
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: types.length,
-                            itemBuilder: (context, index) {
-                              final type = types[index];
-                              return Card(
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                      color: Colors.transparent, width: 0),
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                elevation: 2,
-                                margin: const EdgeInsets.only(
-                                  right: 10.0,
-                                ),
-                                color: getPrimaryTypeColor(types[index]),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 7.5,
-                                    horizontal: 7.5,
+                          Container(
+                            margin: const EdgeInsets.only(
+                              top: 5.0,
+                            ),
+                            height: 34,
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: types.length,
+                              itemBuilder: (context, index) {
+                                final type = types[index];
+                                return Card(
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                        color: Colors.transparent, width: 0),
+                                    borderRadius: BorderRadius.circular(50),
                                   ),
-                                  child: SvgPicture.asset(
-                                    'assets/img/types/${types[index].toString().toLowerCase()}.svg',
-                                    width: 20.0,
-                                    height: 20.0,
+                                  elevation: 2,
+                                  margin: const EdgeInsets.only(
+                                    right: 10.0,
                                   ),
-                                ),
-                              );
-                            },
+                                  color: getPrimaryTypeColor(types[index]),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 7.5,
+                                      horizontal: 7.5,
+                                    ),
+                                    child: SvgPicture.asset(
+                                      'assets/img/types/${types[index].toString().toLowerCase()}.svg',
+                                      width: 20.0,
+                                      height: 20.0,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -219,8 +227,8 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                 left: 0,
                 right: 0,
                 child: Container(
-                  width: MediaQuery.of(context).size.height * 0.25,
-                  height: MediaQuery.of(context).size.height * 0.25,
+                  width: MediaQuery.of(context).size.height * 0.33,
+                  height: MediaQuery.of(context).size.height * 0.33,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: new CachedNetworkImageProvider(hires),
