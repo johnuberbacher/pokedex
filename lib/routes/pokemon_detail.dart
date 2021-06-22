@@ -55,11 +55,6 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
             future: fetchPokemonDetails(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
-                if (snapshot.data[pokemonIndex]["type"][1] == null) {
-                  print('does not exist');
-                } else {
-                  print('exist');
-                }
                 return pokemonDetailScreen(
                   name:
                       snapshot.data[pokemonIndex]["name"]["english"].toString(),
@@ -143,7 +138,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                     child: Container(
                       width: MediaQuery.of(context).size.height * 0.5,
                       height: MediaQuery.of(context).size.height * 0.5,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage("assets/img/pokeball-bg.png"),
                         ),
@@ -231,7 +226,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                   height: MediaQuery.of(context).size.height * 0.33,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: new CachedNetworkImageProvider(hires),
+                      image: CachedNetworkImageProvider(hires),
                       alignment: Alignment.center,
                       fit: BoxFit.contain,
                     ),
@@ -277,7 +272,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                     height: 48,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: new CachedNetworkImageProvider(sprite),
+                        image: CachedNetworkImageProvider(sprite),
                         alignment: Alignment.center,
                         fit: BoxFit.contain,
                       ),
@@ -308,7 +303,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                         vertical: 10.0,
                       ),
                       height: 45,
-                      width: MediaQuery.of(context).size.width * 0.5,
+                      width: MediaQuery.of(context).size.width * 0.75,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: types.length,
