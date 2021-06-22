@@ -43,16 +43,147 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  TextEditingController controller = new TextEditingController();
+  List<dynamic> pokemonGlobalList = [];
+  List<dynamic> pokemonList = [];
+  List<dynamic> filteredList = [];
+  List<dynamic> searchList = [];
+  String searchText = "";
+  bool isLoading = false;
+  Icon searchIcon = Icon(
+    Icons.search,
+    color: Colors.black.withOpacity(0.33),
+  );
+  TextEditingController controller = TextEditingController(text: "");
+
+  _fetchPokemonList() async {
+    setState(() {
+      isLoading = true;
+    });
+    final response = await http.get(Uri.parse(apiUrl));
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      pokemonList = jsonResponse;
+      searchList = [];
+      for (int i = 0; i < pokemonList.length; i++) {
+        searchList.add(pokemonList[i]);
+      }
+    } else {
+      throw Exception("Failed to load Pokemon.");
+    }
+    setState(() {
+      pokemonList = searchList;
+      filteredList = pokemonList;
+      isLoading = false;
+    });
+  }
+
+  Widget _pokemonList() {
+    return isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : ListView.builder(
+            physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics()),
+            itemCount: filteredList.length,
+            itemBuilder: (context, index) {
+              return pokemonCard(
+                name: filteredList[index]["name"]["english"].toString(),
+                types: filteredList[index]["type"],
+                id: filteredList[index]["id"],
+                thumbnail: filteredList[index]["thumbnail"].toString(),
+                primaryType: filteredList[index]["type"][0].toString(),
+              );
+            });
+  }
+
+  Widget _pokemonListSearchBar() {
+    return Container(
+      margin: const EdgeInsets.only(
+        right: 15.0,
+        left: 15.0,
+        top: 15.0,
+        bottom: 15.0,
+      ),
+      child: TextField(
+        controller: controller,
+        onChanged: (text) {
+          _filterPokemonList(text);
+        },
+        decoration: InputDecoration(
+          prefixIcon: searchIcon,
+          border: new OutlineInputBorder(
+            borderRadius: const BorderRadius.all(
+              const Radius.circular(100.0),
+            ),
+            borderSide: BorderSide(
+              width: 0,
+              style: BorderStyle.none,
+            ),
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 10.0,
+            horizontal: 15.0,
+          ),
+          hintText: "Search for a Pokemon",
+          filled: true,
+          fillColor: Colors.black.withOpacity(0.075),
+          hintStyle: TextStyle(color: Colors.black.withOpacity(0.33)),
+        ),
+        style: TextStyle(
+          color: Colors.black.withOpacity(0.66),
+          fontSize: 16.0,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  _filterPokemonList(String text) {
+    setState(() {
+      if (this.searchIcon.icon ==
+          Icon(
+            Icons.search,
+            color: Colors.black.withOpacity(0.33),
+          )) {
+        this.searchIcon = new Icon(
+          Icons.search,
+          color: Colors.black.withOpacity(0.33),
+        );
+      } else {
+        this.searchIcon = new Icon(
+          Icons.search,
+          color: Colors.black.withOpacity(0.33),
+        );
+      }
+    });
+    print("searchtext is:  " + text);
+    if (text.isEmpty || text == "") {
+      setState(() {
+        searchText = "";
+        filteredList = pokemonList;
+      });
+    } else if (text.isNotEmpty) {
+      List tempList = [];
+      for (int i = 0; i < filteredList.length; i++) {
+        if (filteredList[i]['name']['english']
+            .toString()
+            .toLowerCase()
+            .contains(searchText.toString().toLowerCase())) {
+          tempList.add(filteredList[i]);
+        }
+      }
+      filteredList = tempList;
+      setState(() {
+        searchText = text.toString();
+      });
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-  }
-
-  Future<List<dynamic>> fetchPokemon() async {
-    var result = await http.get(Uri.parse(apiUrl));
-    return json.decode(result.body);
+    _fetchPokemonList();
   }
 
   @override
@@ -101,74 +232,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(
-                        right: 15.0,
-                        left: 15.0,
-                        top: 15.0,
-                        bottom: 15.0,
-                      ),
-                      child: TextField(
-                        autofocus: false,
-                        onChanged: onSearchTextChanged,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color: Colors.black.withOpacity(0.33),
-                          ),
-                          border: new OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(100.0),
-                            ),
-                            borderSide: BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 10.0,
-                            horizontal: 15.0,
-                          ),
-                          hintText: "Search for a Pokemon",
-                          filled: true,
-                          fillColor: Colors.black.withOpacity(0.075),
-                          hintStyle:
-                              TextStyle(color: Colors.black.withOpacity(0.33)),
-                        ),
-                        style: TextStyle(
-                          color: Colors.black.withOpacity(0.66),
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
+                    _pokemonListSearchBar(),
                     Expanded(
-                      child: FutureBuilder<List<dynamic>>(
-                        future: fetchPokemon(),
-                        builder:
-                            (BuildContext context, AsyncSnapshot snapshot) {
-                          if (snapshot.hasData) {
-                            return ListView.builder(
-                                padding: EdgeInsets.all(8),
-                                itemCount: snapshot.data.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return pokemonCard(
-                                    name: snapshot.data[index]["name"]
-                                            ["english"]
-                                        .toString(),
-                                    types: snapshot.data[index]["type"],
-                                    id: snapshot.data[index]["id"],
-                                    thumbnail: snapshot.data[index]["thumbnail"]
-                                        .toString(),
-                                    primaryType: snapshot.data[index]["type"][0]
-                                        .toString(),
-                                  );
-                                });
-                          } else {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                        },
-                      ),
+                      child: _pokemonList(),
                     ),
                   ],
                 ),
@@ -187,8 +253,6 @@ class _MyHomePageState extends State<MyHomePage> {
     required int id,
     required String thumbnail,
   }) {
-    print("test");
-    print(types);
     return Card(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
@@ -322,13 +386,5 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
-  }
-
-  onSearchTextChanged(String text) async {
-    if (text.isEmpty) {
-      setState(() {});
-      return;
-    }
-    setState(() {});
   }
 }
