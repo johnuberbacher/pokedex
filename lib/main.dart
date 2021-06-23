@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'services/functions.dart';
 import 'routes/pokemon_detail.dart';
-import 'package:flutter/services.dart';
+import 'services/functions.dart';
 import 'services/api.dart';
 
 void main() {
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent, // transparent status bar
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+    statusBarColor: Colors.transparent, // Android System bar
+    statusBarBrightness: Brightness.light, // iOS System Bar
+    systemNavigationBarDividerColor:
+        Colors.black.withOpacity(0.075), // Android Navigation Bar Divider
+    systemNavigationBarColor: Colors.white, // Android Navigation Bar
+    systemNavigationBarIconBrightness:
+        Brightness.dark, // Android Navigation Bar Icons
   ));
   runApp(const MyApp());
 }
@@ -21,7 +27,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(brightness: Brightness.dark),
         cardTheme: CardTheme(
           shape: RoundedRectangleBorder(
             borderRadius: const BorderRadius.all(
@@ -30,7 +35,8 @@ class MyApp extends StatelessWidget {
             // side: BorderSide(color: Colors.white.withOpacity(0.5), width: 1),
           ),
         ),
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
+        accentColor: Colors.grey,
       ),
       home: MyHomePage(),
     );
@@ -83,6 +89,8 @@ class _MyHomePageState extends State<MyHomePage> {
             child: CircularProgressIndicator(),
           )
         : ListView.builder(
+            padding: EdgeInsets.all(0),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             physics: const AlwaysScrollableScrollPhysics(
                 parent: BouncingScrollPhysics()),
             itemCount: filteredList.length,
@@ -99,42 +107,67 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _pokemonListSearchBar() {
     return Container(
+      height: 50.0,
       margin: const EdgeInsets.only(
-        right: 15.0,
-        left: 15.0,
-        top: 15.0,
+        top: 10.0,
         bottom: 15.0,
       ),
-      child: TextField(
-        controller: controller,
-        onChanged: (text) {
-          _filterPokemonList(text);
-        },
-        decoration: InputDecoration(
-          prefixIcon: searchIcon,
-          border: new OutlineInputBorder(
-            borderRadius: const BorderRadius.all(
-              const Radius.circular(100.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: controller,
+              onChanged: (text) {
+                _filterPokemonList(text);
+              },
+              decoration: InputDecoration(
+                prefixIcon: searchIcon,
+                border: new OutlineInputBorder(
+                  borderRadius: const BorderRadius.all(
+                    const Radius.circular(100.0),
+                  ),
+                  borderSide: BorderSide(
+                    width: 0,
+                    style: BorderStyle.none,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 10.0,
+                  horizontal: 15.0,
+                ),
+                hintText: "Search for a Pokemon",
+                filled: true,
+                fillColor: Colors.black.withOpacity(0.075),
+                hintStyle: TextStyle(color: Colors.black.withOpacity(0.33)),
+              ),
+              style: TextStyle(
+                color: Colors.black.withOpacity(0.66),
+                fontSize: 16.0,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-            borderSide: BorderSide(
-              width: 0,
-              style: BorderStyle.none,
+          ), /*
+          ClipRRect(
+            child: Material(
+              borderRadius: BorderRadius.circular(100),
+              child: PopupMenuButton(
+                  icon: Icon(
+                    Icons.tune,
+                    color: Colors.red,
+                  ),
+                  itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child: Text("First"),
+                          value: 1,
+                        ),
+                        PopupMenuItem(
+                          child: Text("Second"),
+                          value: 2,
+                        )
+                      ]),
             ),
-          ),
-          contentPadding: EdgeInsets.symmetric(
-            vertical: 10.0,
-            horizontal: 15.0,
-          ),
-          hintText: "Search for a Pokemon",
-          filled: true,
-          fillColor: Colors.black.withOpacity(0.075),
-          hintStyle: TextStyle(color: Colors.black.withOpacity(0.33)),
-        ),
-        style: TextStyle(
-          color: Colors.black.withOpacity(0.66),
-          fontSize: 16.0,
-          fontWeight: FontWeight.w600,
-        ),
+          ),*/
+        ],
       ),
     );
   }
@@ -157,8 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       }
     });
-    print("searchtext is:  " + text);
-    if (text.isEmpty || text == "") {
+    if (text.isEmpty) {
       setState(() {
         searchText = "";
         filteredList = pokemonList;
@@ -220,19 +252,23 @@ class _MyHomePageState extends State<MyHomePage> {
                         left: 15.0,
                         top: 15.0,
                       ),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Pokédex",
-                          style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.w900,
-                            color: Colors.red,
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Pokédex",
+                              style: TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.red,
+                              ),
+                            ),
                           ),
-                        ),
+                          _pokemonListSearchBar(),
+                        ],
                       ),
                     ),
-                    _pokemonListSearchBar(),
                     Expanded(
                       child: _pokemonList(),
                     ),
@@ -257,8 +293,8 @@ class _MyHomePageState extends State<MyHomePage> {
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 0,
       margin: const EdgeInsets.only(
-        left: 10.0,
-        right: 10.0,
+        left: 20.0,
+        right: 20.0,
         bottom: 15.0,
       ),
       child: Material(

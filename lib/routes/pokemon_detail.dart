@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:pokedex/services/functions.dart';
+import 'package:Pokedex/services/functions.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pokedex/services/api.dart';
+import 'package:Pokedex/services/api.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class PokemonDetailPage extends StatefulWidget {
@@ -149,8 +149,8 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                     child: Container(
                       padding: const EdgeInsets.only(
                         top: 0.0,
-                        left: 30.0,
-                        right: 30.0,
+                        left: 20.0,
+                        right: 20.0,
                       ),
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.5,
@@ -238,8 +238,9 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
         ),
         Container(
           width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.all(
-            30.0,
+          padding: const EdgeInsets.symmetric(
+            vertical: 30.0,
+            horizontal: 20.0,
           ),
           decoration: BoxDecoration(
             color: Colors.white,

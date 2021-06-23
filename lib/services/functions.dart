@@ -44,7 +44,7 @@ Widget generateBaseStatsIndicator(double stat, String bgColor) {
       Radius.circular(100),
     ),
     child: LinearProgressIndicator(
-      color: getPrimaryTypeColor(bgColor),
+      valueColor: AlwaysStoppedAnimation<Color>(getPrimaryTypeColor(bgColor)),
       backgroundColor: getPrimaryTypeColor(bgColor).withOpacity(0.5),
       minHeight: 10,
       value: getBaseStatsIndicators(stat),
