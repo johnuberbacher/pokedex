@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         cardTheme: CardTheme(
           shape: RoundedRectangleBorder(
@@ -309,7 +310,8 @@ class _MyHomePageState extends State<MyHomePage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => PokemonDetailPage(id - 1)),
+                  builder: (context) =>
+                      PokemonDetailPage(id - 1, filteredList)),
             );
           },
           child: Stack(

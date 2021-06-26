@@ -1,20 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:Pokedex/services/functions.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:Pokedex/services/api.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class PokemonDetailPage extends StatefulWidget {
   final int pokemonIndex;
-  const PokemonDetailPage(this.pokemonIndex);
+  final List<dynamic> pokemonListData;
+  const PokemonDetailPage(this.pokemonIndex, this.pokemonListData);
 
   @override
   _PokemonDetailPageState createState() =>
-      _PokemonDetailPageState(pokemonIndex);
+      _PokemonDetailPageState(pokemonIndex, pokemonListData);
 }
 
 class Type {
@@ -24,11 +22,11 @@ class Type {
 
 class _PokemonDetailPageState extends State<PokemonDetailPage> {
   int pokemonIndex;
-  _PokemonDetailPageState(this.pokemonIndex);
+  List<dynamic> pokemonListData;
+  _PokemonDetailPageState(this.pokemonIndex, this.pokemonListData);
 
   Future<List<dynamic>> fetchPokemonDetails() async {
-    var result = await http.get(Uri.parse(apiUrl));
-    return json.decode(result.body);
+    return await pokemonListData;
   }
 
   @override
@@ -54,34 +52,35 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
           child: FutureBuilder<List<dynamic>>(
             future: fetchPokemonDetails(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasData) {
+              if (pokemonListData.length != 0) {
                 return pokemonDetailScreen(
-                  name:
-                      snapshot.data[pokemonIndex]["name"]["english"].toString(),
-                  id: snapshot.data[pokemonIndex]["id"],
-                  sprite: snapshot.data[pokemonIndex]["sprite"].toString(),
-                  hires: snapshot.data[pokemonIndex]["hires"].toString(),
-                  types: snapshot.data[pokemonIndex]["type"],
+                  name: pokemonListData[pokemonIndex]["name"]["english"]
+                      .toString(),
+                  id: pokemonListData[pokemonIndex]["id"],
+                  sprite: pokemonListData[pokemonIndex]["sprite"].toString(),
+                  hires: pokemonListData[pokemonIndex]["hires"].toString(),
+                  types: pokemonListData[pokemonIndex]["type"],
                   description:
-                      snapshot.data[pokemonIndex]["description"].toString(),
-                  species: snapshot.data[pokemonIndex]["species"].toString(),
+                      pokemonListData[pokemonIndex]["description"].toString(),
+                  species: pokemonListData[pokemonIndex]["species"].toString(),
                   primaryType:
-                      snapshot.data[pokemonIndex]["type"][0].toString(),
-                  baseHP: snapshot.data[pokemonIndex]["base"]["HP"].toDouble(),
-                  baseAttack:
-                      snapshot.data[pokemonIndex]["base"]["Attack"].toDouble(),
-                  baseDefense:
-                      snapshot.data[pokemonIndex]["base"]["Defense"].toDouble(),
-                  baseSpAttack: snapshot.data[pokemonIndex]["base"]
+                      pokemonListData[pokemonIndex]["type"][0].toString(),
+                  baseHP:
+                      pokemonListData[pokemonIndex]["base"]["HP"].toDouble(),
+                  baseAttack: pokemonListData[pokemonIndex]["base"]["Attack"]
+                      .toDouble(),
+                  baseDefense: pokemonListData[pokemonIndex]["base"]["Defense"]
+                      .toDouble(),
+                  baseSpAttack: pokemonListData[pokemonIndex]["base"]
                           ["Sp. Attack"]
                       .toDouble(),
-                  baseSpDefense: snapshot.data[pokemonIndex]["base"]
+                  baseSpDefense: pokemonListData[pokemonIndex]["base"]
                           ["Sp. Defense"]
                       .toDouble(),
                   baseSpeed:
-                      snapshot.data[pokemonIndex]["base"]["Speed"].toDouble(),
+                      pokemonListData[pokemonIndex]["base"]["Speed"].toDouble(),
                 );
-              } else if (snapshot.hasError) {
+              } else {
                 return Container(
                   height: MediaQuery.of(context).size.height,
                   child: Center(
@@ -89,13 +88,6 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                   ),
                 );
               }
-              // By default, show a loading spinner.
-              return Container(
-                height: MediaQuery.of(context).size.height,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
             },
           ),
         ),
