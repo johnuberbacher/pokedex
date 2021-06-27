@@ -3,7 +3,7 @@ Pokedex App built using Dart and Flutter
 
 ### Screenshot
 
-![Screenshot](https://i.imgur.com/5y8NQ7j.png)
+![Screenshot](https://i.imgur.com/8jg5sSs.png)
 
 ### Meta
 
