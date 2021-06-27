@@ -59,7 +59,10 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                   id: pokemonListData[pokemonIndex]["id"],
                   sprite: pokemonListData[pokemonIndex]["sprite"].toString(),
                   hires: pokemonListData[pokemonIndex]["hires"].toString(),
+                  thumbnail:
+                      pokemonListData[pokemonIndex]["thumbnail"].toString(),
                   types: pokemonListData[pokemonIndex]["type"],
+                  evolutions: pokemonListData[pokemonIndex]["evolution"],
                   description:
                       pokemonListData[pokemonIndex]["description"].toString(),
                   species: pokemonListData[pokemonIndex]["species"].toString(),
@@ -102,6 +105,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
     required String primaryType,
     required String sprite,
     required String hires,
+    required String thumbnail,
     required String description,
     required String species,
     required double baseHP,
@@ -110,6 +114,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
     required double baseSpAttack,
     required double baseSpDefense,
     required double baseSpeed,
+    required Map<String, dynamic> evolutions,
   }) {
     return Column(
       children: [
@@ -230,9 +235,10 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
         ),
         Container(
           width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(
-            vertical: 30.0,
-            horizontal: 20.0,
+          padding: const EdgeInsets.only(
+            top: 30.0,
+            right: 20.0,
+            left: 20.0,
           ),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -273,18 +279,6 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 10.0,
-                ),
-                child: Text(
-                  description,
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
               Container(
                 width: MediaQuery.of(context).size.width,
                 child: Row(
@@ -292,9 +286,6 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 10.0,
-                      ),
                       height: 45,
                       width: MediaQuery.of(context).size.width * 0.75,
                       child: ListView.builder(
@@ -343,103 +334,74 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(
-                  bottom: 20.0,
+                  bottom: 30.0,
                 ),
                 child: Text(
-                  "Base Stats",
+                  description,
                   style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    fontSize: 22.0,
+                    color: Colors.black54,
+                    fontSize: 16.0,
                   ),
                 ),
               ),
-              Container(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            right: 15.0,
+              DefaultTabController(
+                length: 3,
+                child: Container(
+                    //  height: 45,
+                    height: 305,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.only(
+                            bottom: 15.0,
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: 15.0,
-                                ),
-                                child: Text(
-                                  "HP",
+                          padding: const EdgeInsets.all(0),
+                          child: TabBar(
+                            physics: const AlwaysScrollableScrollPhysics(
+                                parent: BouncingScrollPhysics()),
+                            indicatorColor: Colors.transparent,
+                            labelColor: Colors.white,
+                            unselectedLabelColor:
+                                getPrimaryTypeColor(primaryType),
+                            indicator: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: getPrimaryTypeColor(primaryType)),
+                            labelPadding: EdgeInsets.symmetric(
+                              vertical: 0,
+                              horizontal: 7.5,
+                            ),
+                            tabs: [
+                              Tab(
+                                icon: Text(
+                                  "Stats",
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: getPrimaryTypeColor(primaryType),
                                     fontWeight: FontWeight.w900,
+                                    letterSpacing: 0.5,
                                     fontSize: 16.0,
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: 15.0,
-                                ),
-                                child: Text(
-                                  "Attack",
+                              Tab(
+                                icon: Text(
+                                  "Evolution",
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: getPrimaryTypeColor(primaryType),
                                     fontWeight: FontWeight.w900,
+                                    letterSpacing: 0.5,
                                     fontSize: 16.0,
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: 15.0,
-                                ),
-                                child: Text(
-                                  "Defense",
+                              Tab(
+                                icon: Text(
+                                  "Resistance",
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: getPrimaryTypeColor(primaryType),
                                     fontWeight: FontWeight.w900,
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: 15.0,
-                                ),
-                                child: Text(
-                                  "Sp. Attack",
-                                  style: TextStyle(
-                                    color: getPrimaryTypeColor(primaryType),
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: 15.0,
-                                ),
-                                child: Text(
-                                  "Sp. Defense",
-                                  style: TextStyle(
-                                    color: getPrimaryTypeColor(primaryType),
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  bottom: 15.0,
-                                ),
-                                child: Text(
-                                  "Speed",
-                                  style: TextStyle(
-                                    color: getPrimaryTypeColor(primaryType),
-                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 0.5,
                                     fontSize: 16.0,
                                   ),
                                 ),
@@ -448,22 +410,287 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                           ),
                         ),
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                          child: TabBarView(
                             children: [
-                              getBaseStat(baseHP, types[0]),
-                              getBaseStat(baseAttack, types[0]),
-                              getBaseStat(baseDefense, types[0]),
-                              getBaseStat(baseSpAttack, types[0]),
-                              getBaseStat(baseSpDefense, types[0]),
-                              getBaseStat(baseSpeed, types[0]),
+                              // Stats
+                              Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                          right: 15.0,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            getBaseStatLabel("HP"),
+                                            getBaseStatLabel("Attack"),
+                                            getBaseStatLabel("Defense"),
+                                            getBaseStatLabel("Sp. Attack"),
+                                            getBaseStatLabel("Sp. Defense"),
+                                            getBaseStatLabel("Speed"),
+                                            getBaseStatLabel("Base Total"),
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            getBaseStat(baseHP, types[0]),
+                                            getBaseStat(baseAttack, types[0]),
+                                            getBaseStat(baseDefense, types[0]),
+                                            getBaseStat(baseSpAttack, types[0]),
+                                            getBaseStat(
+                                                baseSpDefense, types[0]),
+                                            getBaseStat(baseSpeed, types[0]),
+                                            getBaseStat(baseSpeed, types[0]),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              // Evolutions
+                              Center(
+                                child: Column(
+                                  children: [
+                                    // if pokemon has previous evolution
+                                    if (pokemonListData[pokemonIndex]
+                                            ["evolution"]["prev"] !=
+                                        null)
+                                      Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 30),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.25,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.25,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image:
+                                                        CachedNetworkImageProvider(
+                                                      pokemonListData[int.parse(
+                                                                  (pokemonListData[
+                                                                              pokemonIndex]
+                                                                          [
+                                                                          "evolution"]
+                                                                      [
+                                                                      "prev"][0])) -
+                                                              1]["thumbnail"]
+                                                          .toString(),
+                                                    ),
+                                                    alignment: Alignment.center,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Column(
+                                                children: [
+                                                  Icon(
+                                                    Icons
+                                                        .arrow_right_alt_rounded,
+                                                    size: 30,
+                                                    color: Colors.black
+                                                        .withOpacity(0.25),
+                                                  ),
+                                                  Text(
+                                                    pokemonListData[pokemonIndex]
+                                                                ["evolution"]
+                                                            ["prev"][1]
+                                                        .toString(),
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      color: Colors.black54,
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.25,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.25,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image:
+                                                        CachedNetworkImageProvider(
+                                                            thumbnail),
+                                                    alignment: Alignment.center,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    // if pokemon has next evolution
+                                    if (pokemonListData[pokemonIndex]
+                                            ["evolution"]["next"] !=
+                                        null)
+                                      Container(
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.25,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.25,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image:
+                                                        CachedNetworkImageProvider(
+                                                            thumbnail),
+                                                    alignment: Alignment.center,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Column(
+                                                children: [
+                                                  Icon(
+                                                    Icons
+                                                        .arrow_right_alt_rounded,
+                                                    size: 30,
+                                                    color: Colors.black
+                                                        .withOpacity(0.25),
+                                                  ),
+                                                  Text(
+                                                    pokemonListData[pokemonIndex]
+                                                                ["evolution"]
+                                                            ["next"][0][1]
+                                                        .toString(),
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      color: Colors.black54,
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.25,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.25,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image:
+                                                        CachedNetworkImageProvider(
+                                                      pokemonListData[int.parse(
+                                                                  (pokemonListData[pokemonIndex]
+                                                                              [
+                                                                              "evolution"]
+                                                                          [
+                                                                          "next"]
+                                                                      [0][0])) -
+                                                              1]["thumbnail"]
+                                                          .toString(),
+                                                    ),
+                                                    alignment: Alignment.center,
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    // if pokemon has no evolutions
+                                    if (pokemonListData[pokemonIndex]
+                                                ["evolution"]["next"] ==
+                                            null &&
+                                        pokemonListData[pokemonIndex]
+                                                ["evolution"]["prev"] ==
+                                            null)
+                                      Center(
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.25,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.25,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image:
+                                                      CachedNetworkImageProvider(
+                                                          thumbnail),
+                                                  alignment: Alignment.center,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                            ),
+                                            Text(
+                                              "Does not evolve",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w900,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              Icon(Icons.directions_bike),
                             ],
                           ),
                         ),
                       ],
-                    )
-                  ],
-                ),
+                    )),
               ),
             ],
           ),

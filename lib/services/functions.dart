@@ -6,6 +6,22 @@ extension StringExtension on String {
   }
 }
 
+Widget getBaseStatLabel(String label) {
+  return Padding(
+    padding: const EdgeInsets.only(
+      bottom: 15,
+    ),
+    child: Text(
+      label,
+      style: TextStyle(
+        color: Colors.black54,
+        fontWeight: FontWeight.w700,
+        fontSize: 16.0,
+      ),
+    ),
+  );
+}
+
 Widget getBaseStat(double stat, String color) {
   return Padding(
       padding: const EdgeInsets.only(
@@ -25,9 +41,9 @@ Widget getBaseStat(double stat, String color) {
                   left: 20.0,
                 ),
                 child: Text(
-                  stat.toInt().toString() + "/255",
+                  stat.toInt().toString(),
                   style: TextStyle(
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w800,
                     fontSize: 16.0,
                   ),
                 ),
@@ -55,7 +71,6 @@ Widget generateBaseStatsIndicator(double stat, String bgColor) {
 double getBaseStatsIndicators(double value) {
   // Max Pokemon Base Stat value is 255
   double baseStatIndicatorValue = (value.round() / 255);
-  print(baseStatIndicatorValue / 1.0);
   return baseStatIndicatorValue / 1.0;
 }
 

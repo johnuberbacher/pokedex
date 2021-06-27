@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'routes/pokemon_detail.dart';
 import 'services/functions.dart';
 import 'services/api.dart';
+import 'package:draggable_scrollbar/draggable_scrollbar.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -36,6 +37,14 @@ class MyApp extends StatelessWidget {
             // side: BorderSide(color: Colors.white.withOpacity(0.5), width: 1),
           ),
         ),
+        tabBarTheme: TabBarTheme(
+          indicatorSize: TabBarIndicatorSize.tab,
+          labelColor: Colors.black,
+          indicator: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+          ),
+          unselectedLabelColor: Colors.grey,
+        ),
         primarySwatch: Colors.red,
         accentColor: Colors.grey,
       ),
@@ -60,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Icons.search,
     color: Colors.black.withOpacity(0.33),
   );
+  ScrollController _pokemonListController = ScrollController();
   TextEditingController controller = TextEditingController(text: "");
 
   _fetchPokemonList() async {
@@ -89,21 +99,26 @@ class _MyHomePageState extends State<MyHomePage> {
         ? const Center(
             child: CircularProgressIndicator(),
           )
-        : ListView.builder(
-            padding: EdgeInsets.all(0),
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            physics: const AlwaysScrollableScrollPhysics(
-                parent: BouncingScrollPhysics()),
-            itemCount: filteredList.length,
-            itemBuilder: (context, index) {
-              return pokemonCard(
-                name: filteredList[index]["name"]["english"].toString(),
-                types: filteredList[index]["type"],
-                id: filteredList[index]["id"],
-                thumbnail: filteredList[index]["thumbnail"].toString(),
-                primaryType: filteredList[index]["type"][0].toString(),
-              );
-            });
+        : DraggableScrollbar.semicircle(
+            controller: _pokemonListController,
+            child: ListView.builder(
+                controller: _pokemonListController,
+                padding: EdgeInsets.all(0),
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                physics: const AlwaysScrollableScrollPhysics(
+                    parent: BouncingScrollPhysics()),
+                itemCount: filteredList.length,
+                itemBuilder: (context, index) {
+                  return pokemonCard(
+                    name: filteredList[index]["name"]["english"].toString(),
+                    types: filteredList[index]["type"],
+                    id: filteredList[index]["id"],
+                    thumbnail: filteredList[index]["thumbnail"].toString(),
+                    primaryType: filteredList[index]["type"][0].toString(),
+                  );
+                }),
+          );
   }
 
   Widget _pokemonListSearchBar() {
@@ -310,8 +325,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      PokemonDetailPage(id - 1, filteredList)),
+                  builder: (context) => PokemonDetailPage(id - 1, pokemonList)),
             );
           },
           child: Stack(
