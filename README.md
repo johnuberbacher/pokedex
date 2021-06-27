@@ -20,6 +20,6 @@ flutter run
 ### To-Do
 ~~Finish textfield search functionality~~
 
-Add scrollbar to listview for rapid scrolling
+~~Add scrollbar to listview for rapid scrolling~~
 
-add filter menu for filtering between generations and types
+Add filter menu for filtering between generations and pokemon types
