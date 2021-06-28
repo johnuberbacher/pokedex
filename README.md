@@ -1,9 +1,25 @@
-# pokedex
+# Pokédex
 Pokedex App built using Dart and Flutter
+
+### Screenshot
+
+![Screenshot](https://i.imgur.com/8jg5sSs.png)
+
+### Meta
+
+John Uberbacher – [johnuberbacher.com](https://johnuberbacher.com)
+
+### Installation
+
+clone repo
+
+flutter pub get
+
+flutter run
 
 ### To-Do
 ~~Finish textfield search functionality~~
 
-Add scrollbar to listview for rapid scrolling
+~~Add scrollbar to listview for rapid scrolling~~
 
-add filter menu for filtering between generations and types
+Add filter menu for filtering between generations and pokemon types
