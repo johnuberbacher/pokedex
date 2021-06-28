@@ -10,6 +10,7 @@ Widget getBaseStatLabel(String label) {
   return Padding(
     padding: const EdgeInsets.only(
       bottom: 15,
+      top: 5.0,
     ),
     child: Text(
       label,
@@ -25,7 +26,8 @@ Widget getBaseStatLabel(String label) {
 Widget getBaseStat(double stat, String color) {
   return Padding(
       padding: const EdgeInsets.only(
-        bottom: 15.0,
+        bottom: 15,
+        top: 5.0,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
