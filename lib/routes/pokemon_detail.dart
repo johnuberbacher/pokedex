@@ -476,6 +476,9 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                     horizontal: 15.0,
                                   ),
                                   child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       // if pokemon has previous evolution
                                       if (pokemonListData[pokemonIndex]
@@ -538,30 +541,37 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                                 ),
                                               ),
                                               Expanded(
-                                                child: Column(
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .arrow_right_alt_rounded,
-                                                      size: 30,
-                                                      color: Colors.black
-                                                          .withOpacity(0.25),
-                                                    ),
-                                                    Text(
-                                                      pokemonListData[pokemonIndex]
-                                                                  ["evolution"]
-                                                              ["prev"][1]
-                                                          .toString(),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: Colors.black54,
-                                                        fontSize: 14.0,
-                                                        fontWeight:
-                                                            FontWeight.w900,
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 10.0,
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      Icon(
+                                                        Icons
+                                                            .arrow_right_alt_rounded,
+                                                        size: 30,
+                                                        color: Colors.black
+                                                            .withOpacity(0.25),
                                                       ),
-                                                    ),
-                                                  ],
+                                                      Text(
+                                                        pokemonListData[pokemonIndex]
+                                                                    [
+                                                                    "evolution"]
+                                                                ["prev"][1]
+                                                            .toString(),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                          color: Colors.black54,
+                                                          fontSize: 14.0,
+                                                          fontWeight:
+                                                              FontWeight.w900,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                               Expanded(
@@ -626,30 +636,37 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                                 ),
                                               ),
                                               Expanded(
-                                                child: Column(
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .arrow_right_alt_rounded,
-                                                      size: 30,
-                                                      color: Colors.black
-                                                          .withOpacity(0.25),
-                                                    ),
-                                                    Text(
-                                                      pokemonListData[pokemonIndex]
-                                                                  ["evolution"]
-                                                              ["next"][0][1]
-                                                          .toString(),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: Colors.black54,
-                                                        fontSize: 14.0,
-                                                        fontWeight:
-                                                            FontWeight.w900,
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 10.0,
+                                                  ),
+                                                  child: Column(
+                                                    children: [
+                                                      Icon(
+                                                        Icons
+                                                            .arrow_right_alt_rounded,
+                                                        size: 30,
+                                                        color: Colors.black
+                                                            .withOpacity(0.25),
                                                       ),
-                                                    ),
-                                                  ],
+                                                      Text(
+                                                        pokemonListData[pokemonIndex]
+                                                                    [
+                                                                    "evolution"]
+                                                                ["next"][0][1]
+                                                            .toString(),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                          color: Colors.black54,
+                                                          fontSize: 14.0,
+                                                          fontWeight:
+                                                              FontWeight.w900,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                               Expanded(
