@@ -22,4 +22,8 @@ flutter run
 
 ~~Add scrollbar to listview for rapid scrolling~~
 
+Refactor duplicated wdigets
+
+Add typing resistances and strengths within details screen
+
 Add filter menu for filtering between generations and pokemon types
