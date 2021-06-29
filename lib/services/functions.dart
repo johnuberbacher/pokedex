@@ -23,7 +23,7 @@ Widget getBaseStatLabel(String label) {
   );
 }
 
-Widget getBaseStat(double stat, String color) {
+Widget getBaseStat(double stat, String color, double max) {
   return Padding(
       padding: const EdgeInsets.only(
         bottom: 15,
@@ -33,7 +33,7 @@ Widget getBaseStat(double stat, String color) {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: generateBaseStatsIndicator(stat, color),
+            child: generateBaseStatsIndicator(stat, color, max),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -56,7 +56,7 @@ Widget getBaseStat(double stat, String color) {
       ));
 }
 
-Widget generateBaseStatsIndicator(double stat, String bgColor) {
+Widget generateBaseStatsIndicator(double stat, String bgColor, double max) {
   return ClipRRect(
     borderRadius: BorderRadius.all(
       Radius.circular(100),
@@ -65,14 +65,14 @@ Widget generateBaseStatsIndicator(double stat, String bgColor) {
       valueColor: AlwaysStoppedAnimation<Color>(getPrimaryTypeColor(bgColor)),
       backgroundColor: getPrimaryTypeColor(bgColor).withOpacity(0.5),
       minHeight: 10,
-      value: getBaseStatsIndicators(stat),
+      value: getBaseStatsIndicators(stat, max),
     ),
   );
 }
 
-double getBaseStatsIndicators(double value) {
+double getBaseStatsIndicators(double value, double max) {
   // Max Pokemon Base Stat value is 255
-  double baseStatIndicatorValue = (value.round() / 255);
+  double baseStatIndicatorValue = (value.round() / max);
   return baseStatIndicatorValue / 1.0;
 }
 

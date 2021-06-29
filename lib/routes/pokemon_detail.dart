@@ -442,13 +442,17 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.end,
                                           children: [
-                                            getBaseStat(baseHP, types[0]),
-                                            getBaseStat(baseAttack, types[0]),
-                                            getBaseStat(baseDefense, types[0]),
-                                            getBaseStat(baseSpAttack, types[0]),
+                                            getBaseStat(baseHP, types[0], 255),
                                             getBaseStat(
-                                                baseSpDefense, types[0]),
-                                            getBaseStat(baseSpeed, types[0]),
+                                                baseAttack, types[0], 255),
+                                            getBaseStat(
+                                                baseDefense, types[0], 255),
+                                            getBaseStat(
+                                                baseSpAttack, types[0], 255),
+                                            getBaseStat(
+                                                baseSpDefense, types[0], 255),
+                                            getBaseStat(
+                                                baseSpeed, types[0], 255),
                                             getBaseStat(
                                                 (baseHP +
                                                     baseAttack +
@@ -456,7 +460,8 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                                     baseSpAttack +
                                                     baseSpDefense +
                                                     baseSpeed),
-                                                types[0]),
+                                                types[0],
+                                                750),
                                           ],
                                         ),
                                       ),
@@ -465,41 +470,103 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                 ],
                               ),
                               // Evolutions
-                              Column(
-                                children: [
-                                  // if pokemon has previous evolution
-                                  if (pokemonListData[pokemonIndex]["evolution"]
-                                          ["prev"] !=
-                                      null)
-                                    Container(
-                                      margin: const EdgeInsets.only(
-                                        bottom: 30,
-                                      ),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                            child: Material(
-                                              color: Colors.transparent,
-                                              child: AspectRatio(
-                                                aspectRatio: 1,
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) => PokemonDetailPage(
-                                                              int.parse((pokemonListData[pokemonIndex]
+                              Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 15.0,
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      // if pokemon has previous evolution
+                                      if (pokemonListData[pokemonIndex]
+                                              ["evolution"]["prev"] !=
+                                          null)
+                                        Container(
+                                          margin: const EdgeInsets.only(
+                                            bottom: 30,
+                                          ),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Expanded(
+                                                child: Material(
+                                                  color: Colors.transparent,
+                                                  child: AspectRatio(
+                                                    aspectRatio: 1,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  PokemonDetailPage(
+                                                                      int.parse(
+                                                                              (pokemonListData[pokemonIndex]["evolution"]["prev"][0]).toString()) -
+                                                                          1,
+                                                                      pokemonListData)),
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.2,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image:
+                                                              DecorationImage(
+                                                            image:
+                                                                CachedNetworkImageProvider(
+                                                              pokemonListData[int.parse((pokemonListData[pokemonIndex]["evolution"]
                                                                               [
-                                                                              "evolution"]
+                                                                              "prev"]
                                                                           [
-                                                                          "prev"][0])
-                                                                      .toString()) -
-                                                                  1,
-                                                              pokemonListData)),
-                                                    );
-                                                  },
+                                                                          0])) -
+                                                                      1]["thumbnail"]
+                                                                  .toString(),
+                                                            ),
+                                                            alignment: Alignment
+                                                                .center,
+                                                            fit: BoxFit.contain,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Column(
+                                                  children: [
+                                                    Icon(
+                                                      Icons
+                                                          .arrow_right_alt_rounded,
+                                                      size: 30,
+                                                      color: Colors.black
+                                                          .withOpacity(0.25),
+                                                    ),
+                                                    Text(
+                                                      pokemonListData[pokemonIndex]
+                                                                  ["evolution"]
+                                                              ["prev"][1]
+                                                          .toString(),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        color: Colors.black54,
+                                                        fontSize: 14.0,
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: AspectRatio(
+                                                  aspectRatio: 1,
                                                   child: Container(
                                                     width:
                                                         MediaQuery.of(context)
@@ -510,15 +577,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                                       image: DecorationImage(
                                                         image:
                                                             CachedNetworkImageProvider(
-                                                          pokemonListData[int.parse(
-                                                                      (pokemonListData[pokemonIndex]
-                                                                              [
-                                                                              "evolution"]["prev"]
-                                                                          [
-                                                                          0])) -
-                                                                  1]["thumbnail"]
-                                                              .toString(),
-                                                        ),
+                                                                thumbnail),
                                                         alignment:
                                                             Alignment.center,
                                                         fit: BoxFit.contain,
@@ -527,151 +586,37 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                                   ),
                                                 ),
                                               ),
-                                            ),
+                                            ],
                                           ),
-                                          Expanded(
-                                            child: Column(
-                                              children: [
-                                                Icon(
-                                                  Icons.arrow_right_alt_rounded,
-                                                  size: 30,
-                                                  color: Colors.black
-                                                      .withOpacity(0.25),
-                                                ),
-                                                Text(
-                                                  pokemonListData[pokemonIndex]
-                                                              ["evolution"]
-                                                          ["prev"][1]
-                                                      .toString(),
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: Colors.black54,
-                                                    fontSize: 14.0,
-                                                    fontWeight: FontWeight.w900,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: AspectRatio(
-                                              aspectRatio: 1,
-                                              child: Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.2,
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    image:
-                                                        CachedNetworkImageProvider(
-                                                            thumbnail),
-                                                    alignment: Alignment.center,
-                                                    fit: BoxFit.contain,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  // if pokemon has next evolution
-                                  if (pokemonListData[pokemonIndex]["evolution"]
-                                          ["next"] !=
-                                      null)
-                                    Container(
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                            child: AspectRatio(
-                                              aspectRatio: 1,
-                                              child: Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.2,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.2,
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    image:
-                                                        CachedNetworkImageProvider(
-                                                            thumbnail),
-                                                    alignment: Alignment.center,
-                                                    fit: BoxFit.contain,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                              children: [
-                                                Icon(
-                                                  Icons.arrow_right_alt_rounded,
-                                                  size: 30,
-                                                  color: Colors.black
-                                                      .withOpacity(0.25),
-                                                ),
-                                                Text(
-                                                  pokemonListData[pokemonIndex]
-                                                              ["evolution"]
-                                                          ["next"][0][1]
-                                                      .toString(),
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: Colors.black54,
-                                                    fontSize: 14.0,
-                                                    fontWeight: FontWeight.w900,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Material(
-                                              color: Colors.transparent,
-                                              child: AspectRatio(
-                                                aspectRatio: 1,
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) => PokemonDetailPage(
-                                                              int.parse((pokemonListData[pokemonIndex]["evolution"]
-                                                                              [
-                                                                              "next"]
-                                                                          [
-                                                                          0][0])
-                                                                      .toString()) -
-                                                                  1,
-                                                              pokemonListData)),
-                                                    );
-                                                  },
+                                        ),
+                                      // if pokemon has next evolution
+                                      if (pokemonListData[pokemonIndex]
+                                              ["evolution"]["next"] !=
+                                          null)
+                                        Container(
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Expanded(
+                                                child: AspectRatio(
+                                                  aspectRatio: 1,
                                                   child: Container(
                                                     width:
                                                         MediaQuery.of(context)
-                                                            .size
-                                                            .width,
+                                                                .size
+                                                                .width *
+                                                            0.2,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.2,
                                                     decoration: BoxDecoration(
                                                       image: DecorationImage(
                                                         image:
                                                             CachedNetworkImageProvider(
-                                                          pokemonListData[int.parse((pokemonListData[pokemonIndex]
-                                                                              [
-                                                                              "evolution"]
-                                                                          [
-                                                                          "next"]
-                                                                      [0][0])) -
-                                                                  1]["thumbnail"]
-                                                              .toString(),
-                                                        ),
+                                                                thumbnail),
                                                         alignment:
                                                             Alignment.center,
                                                         fit: BoxFit.contain,
@@ -680,52 +625,129 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  // if pokemon has no evolutions
-                                  if (pokemonListData[pokemonIndex]["evolution"]
-                                              ["next"] ==
-                                          null &&
-                                      pokemonListData[pokemonIndex]["evolution"]
-                                              ["prev"] ==
-                                          null)
-                                    Column(
-                                      children: [
-                                        Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.2,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.2,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image: CachedNetworkImageProvider(
-                                                  thumbnail),
-                                              alignment: Alignment.center,
-                                              fit: BoxFit.contain,
-                                            ),
+                                              Expanded(
+                                                child: Column(
+                                                  children: [
+                                                    Icon(
+                                                      Icons
+                                                          .arrow_right_alt_rounded,
+                                                      size: 30,
+                                                      color: Colors.black
+                                                          .withOpacity(0.25),
+                                                    ),
+                                                    Text(
+                                                      pokemonListData[pokemonIndex]
+                                                                  ["evolution"]
+                                                              ["next"][0][1]
+                                                          .toString(),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        color: Colors.black54,
+                                                        fontSize: 14.0,
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Material(
+                                                  color: Colors.transparent,
+                                                  child: AspectRatio(
+                                                    aspectRatio: 1,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  PokemonDetailPage(
+                                                                      int.parse(
+                                                                              (pokemonListData[pokemonIndex]["evolution"]["next"][0][0]).toString()) -
+                                                                          1,
+                                                                      pokemonListData)),
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          image:
+                                                              DecorationImage(
+                                                            image:
+                                                                CachedNetworkImageProvider(
+                                                              pokemonListData[int.parse((pokemonListData[pokemonIndex]["evolution"]["next"]
+                                                                              [
+                                                                              0]
+                                                                          [
+                                                                          0])) -
+                                                                      1]["thumbnail"]
+                                                                  .toString(),
+                                                            ),
+                                                            alignment: Alignment
+                                                                .center,
+                                                            fit: BoxFit.contain,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        Text(
-                                          "Does not evolve",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w900,
-                                          ),
+                                      // if pokemon has no evolutions
+                                      if (pokemonListData[pokemonIndex]
+                                                  ["evolution"]["next"] ==
+                                              null &&
+                                          pokemonListData[pokemonIndex]
+                                                  ["evolution"]["prev"] ==
+                                              null)
+                                        Column(
+                                          children: [
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.2,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.2,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image:
+                                                      CachedNetworkImageProvider(
+                                                          thumbnail),
+                                                  alignment: Alignment.center,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                            ),
+                                            Text(
+                                              "Does not evolve",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w900,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                ],
+                                    ],
+                                  ),
+                                ),
                               ),
-                              Icon(Icons.directions_bike),
+                              Center(
+                                child: Text("coming soon!"),
+                              ),
                             ],
                           ),
                         ),
