@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 extension StringExtension on String {
   String capitalize() {
@@ -74,6 +75,231 @@ double getBaseStatsIndicators(double value, double max) {
   // Max Pokemon Base Stat value is 255
   double baseStatIndicatorValue = (value.round() / max);
   return baseStatIndicatorValue / 1.0;
+}
+
+Widget typeResistance({
+  required String name,
+}) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children: [
+      Container(
+        margin: const EdgeInsets.only(
+          left: 15.0,
+          right: 15.0,
+          bottom: 15.0,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Card(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              shape: RoundedRectangleBorder(
+                side: const BorderSide(color: Colors.transparent, width: 0),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              elevation: 2,
+              margin: const EdgeInsets.only(
+                bottom: 10.0,
+              ),
+              color: getPrimaryTypeColor('0xFF60bd58'),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 7.5,
+                  horizontal: 7.5,
+                ),
+                child: SvgPicture.asset(
+                  'assets/img/types/fire.svg',
+                  width: 20.0,
+                  height: 20.0,
+                ),
+              ),
+            ),
+            Text(
+              "1/2",
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 16.0,
+              ),
+            ),
+          ],
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.only(
+          left: 15.0,
+          right: 15.0,
+          bottom: 15.0,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Card(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              shape: RoundedRectangleBorder(
+                side: const BorderSide(color: Colors.transparent, width: 0),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              elevation: 2,
+              margin: const EdgeInsets.only(
+                bottom: 10.0,
+              ),
+              color: getPrimaryTypeColor('0xFF60bd58'),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 7.5,
+                  horizontal: 7.5,
+                ),
+                child: SvgPicture.asset(
+                  'assets/img/types/fire.svg',
+                  width: 20.0,
+                  height: 20.0,
+                ),
+              ),
+            ),
+            Text(
+              "1/2",
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 16.0,
+              ),
+            ),
+          ],
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.only(
+          left: 15.0,
+          right: 15.0,
+          bottom: 15.0,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Card(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              shape: RoundedRectangleBorder(
+                side: const BorderSide(color: Colors.transparent, width: 0),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              elevation: 2,
+              margin: const EdgeInsets.only(
+                bottom: 10.0,
+              ),
+              color: getPrimaryTypeColor('0xFF60bd58'),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 7.5,
+                  horizontal: 7.5,
+                ),
+                child: SvgPicture.asset(
+                  'assets/img/types/fire.svg',
+                  width: 20.0,
+                  height: 20.0,
+                ),
+              ),
+            ),
+            Text(
+              "1/2",
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 16.0,
+              ),
+            ),
+          ],
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.only(
+          left: 15.0,
+          right: 15.0,
+          bottom: 15.0,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Card(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              shape: RoundedRectangleBorder(
+                side: const BorderSide(color: Colors.transparent, width: 0),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              elevation: 2,
+              margin: const EdgeInsets.only(
+                bottom: 10.0,
+              ),
+              color: getPrimaryTypeColor('0xFF60bd58'),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 7.5,
+                  horizontal: 7.5,
+                ),
+                child: SvgPicture.asset(
+                  'assets/img/types/fire.svg',
+                  width: 20.0,
+                  height: 20.0,
+                ),
+              ),
+            ),
+            Text(
+              "1/2",
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 16.0,
+              ),
+            ),
+          ],
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.only(
+          left: 15.0,
+          right: 15.0,
+          bottom: 15.0,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Card(
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              shape: RoundedRectangleBorder(
+                side: const BorderSide(color: Colors.transparent, width: 0),
+                borderRadius: BorderRadius.circular(50),
+              ),
+              elevation: 2,
+              margin: const EdgeInsets.only(
+                bottom: 10.0,
+              ),
+              color: getPrimaryTypeColor('0xFF60bd58'),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 7.5,
+                  horizontal: 7.5,
+                ),
+                child: SvgPicture.asset(
+                  'assets/img/types/fire.svg',
+                  width: 20.0,
+                  height: 20.0,
+                ),
+              ),
+            ),
+            Text(
+              "1/2",
+              style: TextStyle(
+                fontWeight: FontWeight.w800,
+                fontSize: 16.0,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
 }
 
 Color getPrimaryTypeColor(String primaryType) {

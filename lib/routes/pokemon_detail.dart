@@ -8,25 +8,28 @@ import 'package:cached_network_image/cached_network_image.dart';
 class PokemonDetailPage extends StatefulWidget {
   final int pokemonIndex;
   final List<dynamic> pokemonListData;
-  const PokemonDetailPage(this.pokemonIndex, this.pokemonListData);
+  final List<dynamic> typesList;
+  const PokemonDetailPage(
+      this.pokemonIndex, this.pokemonListData, this.typesList);
 
   @override
   _PokemonDetailPageState createState() =>
-      _PokemonDetailPageState(pokemonIndex, pokemonListData);
-}
-
-class Type {
-  final String typeName;
-  Type({required this.typeName});
+      _PokemonDetailPageState(pokemonIndex, pokemonListData, typesList);
 }
 
 class _PokemonDetailPageState extends State<PokemonDetailPage> {
   int pokemonIndex;
   List<dynamic> pokemonListData;
-  _PokemonDetailPageState(this.pokemonIndex, this.pokemonListData);
+  List<dynamic> typesList = [];
+  _PokemonDetailPageState(
+      this.pokemonIndex, this.pokemonListData, this.typesList);
 
   Future<List<dynamic>> fetchPokemonDetails() async {
     return await pokemonListData;
+  }
+
+  Future<List<dynamic>> fetchPokemonResistances() async {
+    return await typesList;
   }
 
   @override
@@ -502,12 +505,14 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                                         Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  PokemonDetailPage(
-                                                                      int.parse(
-                                                                              (pokemonListData[pokemonIndex]["evolution"]["prev"][0]).toString()) -
-                                                                          1,
-                                                                      pokemonListData)),
+                                                              builder: (context) => PokemonDetailPage(
+                                                                  int.parse((pokemonListData[pokemonIndex]["evolution"]["prev"]
+                                                                              [
+                                                                              0])
+                                                                          .toString()) -
+                                                                      1,
+                                                                  pokemonListData,
+                                                                  typesList)),
                                                         );
                                                       },
                                                       child: Container(
@@ -679,12 +684,14 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                                         Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  PokemonDetailPage(
-                                                                      int.parse(
-                                                                              (pokemonListData[pokemonIndex]["evolution"]["next"][0][0]).toString()) -
-                                                                          1,
-                                                                      pokemonListData)),
+                                                            builder: (context) =>
+                                                                PokemonDetailPage(
+                                                                    int.parse((pokemonListData[pokemonIndex]["evolution"]["next"][0][0])
+                                                                            .toString()) -
+                                                                        1,
+                                                                    pokemonListData,
+                                                                    typesList),
+                                                          ),
                                                         );
                                                       },
                                                       child: Container(
@@ -762,8 +769,27 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                   ),
                                 ),
                               ),
-                              Center(
-                                child: Text("coming soon!"),
+                              Column(
+                                children: [
+                                  FutureBuilder<List<dynamic>>(
+                                    future: fetchPokemonResistances(),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot snapshot) {
+                                      if (typesList.length != 0) {
+                                        return listOfWidgets();
+                                      } else {
+                                        return Container(
+                                          height: MediaQuery.of(context)
+                                              .size
+                                              .height,
+                                          child: Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -774,6 +800,60 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
             ],
           ),
         ),
+      ],
+    );
+  }
+
+  Widget listOfWidgets() {
+    var list = ["one", "two", "three", "four"];
+    return Wrap(
+      runSpacing: 25,
+      spacing: 25,
+      runAlignment: WrapAlignment.spaceEvenly,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: <Widget>[
+        for (var typeName in typesList)
+          Container(
+            margin: const EdgeInsets.only(
+              top: 5.0,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Card(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(color: Colors.transparent, width: 0),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  elevation: 2,
+                  margin: const EdgeInsets.only(
+                    bottom: 10.0,
+                  ),
+                  color: getPrimaryTypeColor(typeName['english']),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 7.5,
+                      horizontal: 7.5,
+                    ),
+                    child: SvgPicture.asset(
+                      'assets/img/types/${typeName['english'].toString().toLowerCase()}.svg',
+                      width: 20.0,
+                      height: 20.0,
+                    ),
+                  ),
+                ),
+                Text(
+                  "1/2",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 16.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
       ],
     );
   }
