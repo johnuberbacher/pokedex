@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 physics: const AlwaysScrollableScrollPhysics(
                     parent: BouncingScrollPhysics()),
                 // itemCount: filteredList.length,
-                itemCount: 809,
+                itemCount: filteredList.length,
                 itemBuilder: (context, index) {
                   return pokemonCard(
                     name: filteredList[index]["name"]["english"].toString(),
@@ -289,7 +289,7 @@ class _MyHomePageState extends State<MyHomePage> {
           onTap: () {
             Navigator.push(
               context,
-              CupertinoPageRoute(
+              MaterialPageRoute(
                 builder: (context) =>
                     PokemonDetailPage(id - 1, pokemonList, typesList),
               ),

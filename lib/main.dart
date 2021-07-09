@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:Pokedex/routes/home.dart';
-import 'package:cupertino_back_gesture/cupertino_back_gesture.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -22,37 +21,34 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BackGestureWidthTheme(
-      backGestureWidth: BackGestureWidth.fraction(1 / 1),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          platform: TargetPlatform.iOS,
-          pageTransitionsTheme: PageTransitionsTheme(builders: {
-            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-          }),
-          cardTheme: CardTheme(
-            shape: RoundedRectangleBorder(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(15.0),
-              ),
-              // side: BorderSide(color: Colors.white.withOpacity(0.5), width: 1),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        platform: TargetPlatform.iOS,
+        pageTransitionsTheme: PageTransitionsTheme(builders: {
+          TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        }),
+        cardTheme: CardTheme(
+          shape: RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(
+              Radius.circular(15.0),
             ),
+            // side: BorderSide(color: Colors.white.withOpacity(0.5), width: 1),
           ),
-          tabBarTheme: TabBarTheme(
-            indicatorSize: TabBarIndicatorSize.tab,
-            labelColor: Colors.black,
-            indicator: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-            ),
-            unselectedLabelColor: Colors.grey,
-          ),
-          primarySwatch: Colors.red,
-          accentColor: Colors.grey,
         ),
-        home: MyHomePage(),
+        tabBarTheme: TabBarTheme(
+          indicatorSize: TabBarIndicatorSize.tab,
+          labelColor: Colors.black,
+          indicator: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+          ),
+          unselectedLabelColor: Colors.grey,
+        ),
+        primarySwatch: Colors.red,
+        accentColor: Colors.grey,
       ),
+      home: MyHomePage(),
     );
   }
 }

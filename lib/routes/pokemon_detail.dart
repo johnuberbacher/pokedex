@@ -845,7 +845,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                   ),
                 ),
                 Text(
-                  "1/2",
+                  "x1",
                   style: TextStyle(
                     fontWeight: FontWeight.w800,
                     fontSize: 16.0,
