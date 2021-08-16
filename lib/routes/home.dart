@@ -305,10 +305,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.white.withOpacity(0.15),
                     child: Container(
                       margin: const EdgeInsets.only(
-                        top: 10.0,
-                        bottom: 10.0,
-                        right: 10.0,
-                        left: 10.0,
+                        top: 15.0,
+                        bottom: 15.0,
+                        right: 15.0,
+                        left: 15.0,
                       ),
                       width: 60,
                       height: 60,
