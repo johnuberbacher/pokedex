@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -345,4 +347,9 @@ Color getPrimaryTypeColor(String primaryType) {
   } else {
     return color = Color(0xFFd6dee5);
   }
+}
+
+String roundGenderRatio(String genderRatio) {
+  var genderArray = genderRatio.split(':');
+  return "${double.parse(genderArray[0]).floor()}:${double.parse(genderArray[1]).ceil()}";
 }

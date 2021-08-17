@@ -86,6 +86,12 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                       .toDouble(),
                   baseSpeed:
                       pokemonListData[pokemonIndex]["base"]["Speed"].toDouble(),
+                  height: pokemonListData[pokemonIndex]["profile"]["height"]
+                      .toString(),
+                  weight: pokemonListData[pokemonIndex]["profile"]["weight"]
+                      .toString(),
+                  gender: pokemonListData[pokemonIndex]["profile"]["gender"]
+                      .toString(),
                 );
               } else {
                 return Container(
@@ -112,6 +118,9 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
     required String thumbnail,
     required String description,
     required String species,
+    required String height,
+    required String weight,
+    required String gender,
     required double baseHP,
     required double baseAttack,
     required double baseDefense,
@@ -252,6 +261,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                 padding: const EdgeInsets.only(
                   right: 20.0,
                   left: 20.0,
+                  bottom: 10.0,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,7 +292,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                         children: [
                           Container(
                             margin: const EdgeInsets.only(
-                              bottom: 25.0,
+                              bottom: 30.0,
                             ),
                             height: 30,
                             child: ListView.builder(
@@ -339,20 +349,167 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                         ),
                       ),
                     ),
-                    Align(
-                      child: Container(
-                        margin: const EdgeInsets.only(
-                          bottom: 25.0,
-                        ),
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: CachedNetworkImageProvider(
-                                'https://raw.githubusercontent.com/johnuberbacher/pokemon_json/main/images/pokedex/animated/${name.toString().toLowerCase()}.gif'),
-                            alignment: Alignment.center,
-                            fit: BoxFit.contain,
-                          ),
+                    Container(
+                      margin: const EdgeInsets.only(
+                        bottom: 10.0,
+                      ),
+                      child: IntrinsicHeight(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              child: Card(
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                elevation: 0,
+                                margin: const EdgeInsets.only(
+                                  left: 5.0,
+                                  right: 5.0,
+                                ),
+                                child: Material(
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                        color: Colors.transparent, width: 0),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  color: Colors.black.withOpacity(0.033),
+                                  child: Container(
+                                    margin: const EdgeInsets.only(
+                                      top: 30.0,
+                                      bottom: 30.0,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            bottom: 7.5,
+                                          ),
+                                          child: Text(
+                                            height,
+                                            style: TextStyle(
+                                                color: getPrimaryTypeColor(
+                                                    primaryType),
+                                                fontSize: 18.0,
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ),
+                                        Text(
+                                          "Height",
+                                          style: TextStyle(
+                                              fontSize: 13.0,
+                                              color: Colors.black54,
+                                              fontWeight: FontWeight.w800),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Card(
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                elevation: 0,
+                                margin: const EdgeInsets.only(
+                                  left: 5.0,
+                                  right: 5.0,
+                                ),
+                                child: Material(
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                        color: Colors.transparent, width: 0),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  color: Colors.black.withOpacity(0.033),
+                                  child: Container(
+                                    margin: const EdgeInsets.only(
+                                      top: 30.0,
+                                      bottom: 30.0,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            bottom: 7.5,
+                                          ),
+                                          child: Text(
+                                            weight,
+                                            style: TextStyle(
+                                                color: getPrimaryTypeColor(
+                                                    primaryType),
+                                                fontSize: 18.0,
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                        ),
+                                        Text(
+                                          "Weight",
+                                          style: TextStyle(
+                                              fontSize: 13.0,
+                                              color: Colors.black54,
+                                              fontWeight: FontWeight.w800),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Card(
+                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                elevation: 0,
+                                margin: const EdgeInsets.only(
+                                  left: 5.0,
+                                  right: 5.0,
+                                ),
+                                child: Material(
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                        color: Colors.transparent, width: 0),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  color: Colors.black.withOpacity(0.033),
+                                  child: Container(
+                                    margin: const EdgeInsets.only(
+                                      top: 30.0,
+                                      bottom: 30.0,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            bottom: 7.5,
+                                          ),
+                                          child: FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Text(
+                                              gender == "Genderless"
+                                                  ? gender
+                                                  : roundGenderRatio(gender),
+                                              style: TextStyle(
+                                                  color: getPrimaryTypeColor(
+                                                      primaryType),
+                                                  fontSize: 18.0,
+                                                  fontWeight: FontWeight.w800),
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          "Gender Ratio",
+                                          style: TextStyle(
+                                              fontSize: 13.0,
+                                              color: Colors.black54,
+                                              fontWeight: FontWeight.w800),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -522,7 +679,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                   Center(
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
-                                        horizontal: 15.0,
+                                        horizontal: 25.0,
                                       ),
                                       child: Column(
                                         crossAxisAlignment:
@@ -839,7 +996,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                           builder: (BuildContext context,
                                               AsyncSnapshot snapshot) {
                                             if (typesList.length != 0) {
-                                              return listOfWidgets(
+                                              return pokemonDetailsResistances(
                                                   types, typesList);
                                             } else {
                                               return Container(
@@ -872,11 +1029,9 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
     );
   }
 
-  Widget listOfWidgets(types, typeList) {
-    print("Types variable:");
-    print(types);
-    print("Global Types variable:");
-    print(typeList);
+  Widget pokemonDetailsResistances(types, typeList) {
+    List<String> pokemonEffectiveTypes = typesList[0]["effective"];
+    List<String> pokemonIneffectiveTypes = [];
     return Wrap(
       runSpacing: 15,
       spacing: 25,
@@ -923,21 +1078,15 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      types.contains(typeName['english'].toString())
-                          ? Text(
-                              "1/2",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w800,
-                                fontSize: 16.0,
-                              ),
-                            )
-                          : Text(
-                              "1",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w800,
-                                fontSize: 16.0,
-                              ),
-                            ),
+                      // Check for Weakness/Ineffective Types
+
+                      Text(
+                        "IN",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 16.0,
+                        ),
+                      ),
                       Text(
                         "x",
                         style: TextStyle(

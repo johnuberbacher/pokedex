@@ -18,7 +18,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<dynamic> pokemonGlobalList = [];
   List<dynamic> pokemonList = [];
   List<dynamic> filteredList = [];
-  List<dynamic> searchList = [];
+  List<dynamic> originalList = [];
   List<dynamic> typesList = [];
   String searchText = "";
   bool isLoading = false;
@@ -26,6 +26,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Icons.search,
     color: Colors.black.withOpacity(0.33),
   );
+  int pokemonListCount = 0;
   ScrollController _pokemonListController = ScrollController();
   TextEditingController controller = TextEditingController(text: "");
 
@@ -33,6 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       isLoading = true;
     });
+
     final pokemonResponse = await http.get(Uri.parse(apiUrl));
     final typesResponse = await http.get(Uri.parse(typesApiUrl));
     if (pokemonResponse.statusCode == 200 && typesResponse.statusCode == 200) {
@@ -40,23 +42,18 @@ class _MyHomePageState extends State<MyHomePage> {
       final typesJsonResponse = json.decode(typesResponse.body);
       pokemonList = pokemonJsonResponse;
       typesList = typesJsonResponse;
-      searchList = [];
-      for (int i = 0; i < pokemonList.length; i++) {
-        searchList.add(pokemonList[i]);
-      }
     } else {
       throw Exception("Failed to load Pokemon.");
     }
+
     setState(() {
-      pokemonList = searchList;
       filteredList = pokemonList;
+      originalList = pokemonList;
+      pokemonListCount = pokemonList.length;
       typesList = typesList;
-      print(typesList);
       isLoading = false;
     });
   }
-
-  _fetchPokemonTypes() async {}
 
   Widget _pokemonList() {
     return isLoading
@@ -73,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 physics: const AlwaysScrollableScrollPhysics(
                     parent: BouncingScrollPhysics()),
                 // itemCount: filteredList.length,
-                itemCount: filteredList.length,
+                itemCount: pokemonListCount,
                 itemBuilder: (context, index) {
                   return pokemonCard(
                     name: filteredList[index]["name"]["english"].toString(),
@@ -127,27 +124,63 @@ class _MyHomePageState extends State<MyHomePage> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-          ), /*
-          ClipRRect(
-            child: Material(
-              borderRadius: BorderRadius.circular(100),
-              child: PopupMenuButton(
+          ),
+          Container(
+            margin: const EdgeInsets.only(
+              left: 10.0,
+            ),
+            child: ClipOval(
+              child: Material(
+                borderRadius: BorderRadius.circular(100),
+                child: PopupMenuButton(
                   icon: Icon(
                     Icons.tune,
                     color: Colors.red,
                   ),
                   itemBuilder: (context) => [
-                        PopupMenuItem(
-                          child: Text("First"),
-                          value: 1,
-                        ),
-                        PopupMenuItem(
-                          child: Text("Second"),
-                          value: 2,
-                        )
-                      ]),
+                    PopupMenuItem(
+                      child: Text("All Generations"),
+                      value: 0,
+                    ),
+                    PopupMenuItem(
+                      child: Text("Generation I"),
+                      value: 1,
+                    ),
+                    PopupMenuItem(
+                      child: Text("Generation II"),
+                      value: 2,
+                    ),
+                    PopupMenuItem(
+                      child: Text("Generation III"),
+                      value: 3,
+                    ),
+                    PopupMenuItem(
+                      child: Text("Generation IV"),
+                      value: 4,
+                    ),
+                    PopupMenuItem(
+                      child: Text("Generation V"),
+                      value: 5,
+                    ),
+                  ],
+                  onSelected: (int index) {
+                    setState(() {
+                      filteredList = originalList;
+                      if (index == 0) {
+                        pokemonListCount = originalList.length;
+                      } else if (index == 1) {
+                        pokemonListCount = 151;
+                      } else if (index == 2) {
+                        filteredList.skip(151).take(251);
+                        pokemonListCount = 100;
+                      }
+                    });
+                    print('index is $index');
+                  },
+                ),
+              ),
             ),
-          ),*/
+          ),
         ],
       ),
     );
@@ -161,7 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.black.withOpacity(0.33),
           )) {
         this.searchIcon = new Icon(
-          Icons.search,
+          Icons.cancel_outlined,
           color: Colors.black.withOpacity(0.33),
         );
       } else {
@@ -389,13 +422,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
               Positioned(
-                right: 20,
-                bottom: 18,
+                right: 15,
+                bottom: 25,
                 child: Text(
                   "#" + id.toString().padLeft(3, '0'),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 36,
+                    fontSize: 32,
                     color: Colors.white.withOpacity(0.5),
                   ),
                 ),
