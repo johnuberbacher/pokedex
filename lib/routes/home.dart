@@ -124,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          Container(
+          /*Container(
             margin: const EdgeInsets.only(
               left: 10.0,
             ),
@@ -170,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     } else if (index == 1) {
                       setState(() {
                         filteredList = originalList;
-                        filteredList.removeRange(151, 809);
+                        filteredList = filteredList.removeRange(151, 809);
                       });
                     } else if (index == 2) {
                       setState(() {
@@ -183,7 +183,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );

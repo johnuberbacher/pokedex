@@ -306,7 +306,6 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                   scrollDirection: Axis.horizontal,
                                   itemCount: types.length,
                                   itemBuilder: (context, index) {
-                                    print(types);
                                     return Card(
                                       clipBehavior: Clip.antiAliasWithSaveLayer,
                                       shape: RoundedRectangleBorder(
@@ -591,7 +590,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                       ),
                                       Tab(
                                         icon: Text(
-                                          "Resistance",
+                                          "Advantage",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontWeight: FontWeight.w900,
@@ -792,19 +791,39 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                                                       Expanded(
                                                         child: AspectRatio(
                                                           aspectRatio: 1,
-                                                          child: Container(
-                                                            width:
-                                                                MediaQuery.of(context).size.width *
-                                                                    0.2,
-                                                            height:
-                                                                MediaQuery.of(context).size.width *
-                                                                    0.2,
-                                                            decoration: BoxDecoration(
-                                                              image: DecorationImage(
-                                                                image: CachedNetworkImageProvider(
-                                                                    thumbnail),
-                                                                alignment: Alignment.center,
-                                                                fit: BoxFit.contain,
+                                                          child: InkWell(
+                                                            onTap: () {
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) => PokemonDetailPage(
+                                                                        int.parse((pokemonListData[
+                                                                                            pokemonIndex]
+                                                                                        [
+                                                                                        "evolution"]
+                                                                                    ["next"][0])
+                                                                                .toString()) -
+                                                                            1,
+                                                                        pokemonListData,
+                                                                        typesList)),
+                                                              );
+                                                            },
+                                                            child: Container(
+                                                              width: MediaQuery.of(context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.2,
+                                                              height: MediaQuery.of(context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.2,
+                                                              decoration: BoxDecoration(
+                                                                image: DecorationImage(
+                                                                  image: CachedNetworkImageProvider(
+                                                                      thumbnail),
+                                                                  alignment: Alignment.center,
+                                                                  fit: BoxFit.contain,
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
@@ -974,9 +993,24 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
     );
   }
 
-  Widget pokemonDetailsResistances(types, typeList) {
-    List<String> pokemonEffectiveTypes = typesList[0]["effective"];
-    List<String> pokemonIneffectiveTypes = [];
+  Widget pokemonDetailsResistances(typeName, typeList) {
+    calculateTypeResistance(selectedPokemonType, pokemonIneffectiveTypes, pokemonEffectiveTypes) {
+      print('typename is: ${typeName[0]}');
+      // Check for same-type resistance
+      print('${pokemonIneffectiveTypes}');
+      if (selectedPokemonType.toString() == typeName[0]) {
+        return "1/2";
+      } else if (pokemonIneffectiveTypes.contains(typeName[0])) {
+        print("matched: ${typeName[0]}");
+        return "2";
+      } else if (pokemonEffectiveTypes.contains(typeName[0])) {
+        print("matched: ${typeName[0]}");
+        return "1/2";
+      } else {
+        return "1";
+      }
+    }
+
     return Wrap(
       runSpacing: 15,
       spacing: 25,
@@ -984,7 +1018,7 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
       runAlignment: WrapAlignment.center,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: <Widget>[
-        for (var typeName in typesList)
+        for (var typeName in typeList)
           Container(
             width: 35,
             height: 70,
@@ -1024,14 +1058,6 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // Check for Weakness/Ineffective Types
-
-                      Text(
-                        "IN",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 16.0,
-                        ),
-                      ),
                       Text(
                         "x",
                         style: TextStyle(
@@ -1040,6 +1066,13 @@ class _PokemonDetailPageState extends State<PokemonDetailPage> {
                           fontSize: 14.0,
                         ),
                       ),
+                      Text(
+                        '${calculateTypeResistance(typeName['english'], typeName['ineffective'], typeName['effective'])}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 16.0,
+                        ),
+                      )
                     ],
                   ),
                 ),

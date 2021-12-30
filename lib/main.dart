@@ -9,16 +9,13 @@ void main() {
     systemNavigationBarDividerColor:
         Colors.black.withOpacity(0.075), // Android Navigation Bar Divider
     systemNavigationBarColor: Colors.white, // Android Navigation Bar
-    systemNavigationBarIconBrightness:
-        Brightness.dark, // Android Navigation Bar Icons
+    systemNavigationBarIconBrightness: Brightness.dark, // Android Navigation Bar Icons
   ));
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
