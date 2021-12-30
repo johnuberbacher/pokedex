@@ -1,13 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:Pokedex/services/api.dart';
 import 'package:Pokedex/services/functions.dart';
 import 'package:Pokedex/routes/pokemon_detail.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -41,9 +41,10 @@ class _MyHomePageState extends State<MyHomePage> {
       final pokemonJsonResponse = json.decode(pokemonResponse.body);
       final typesJsonResponse = json.decode(typesResponse.body);
       pokemonList = pokemonJsonResponse;
+      originalList = pokemonJsonResponse;
       typesList = typesJsonResponse;
     } else {
-      throw Exception("Failed to load Pokemon.");
+      throw Exception("Failed to load data.");
     }
 
     setState(() {
@@ -65,18 +66,16 @@ class _MyHomePageState extends State<MyHomePage> {
             child: ListView.builder(
                 controller: _pokemonListController,
                 padding: EdgeInsets.all(0),
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                physics: const AlwaysScrollableScrollPhysics(
-                    parent: BouncingScrollPhysics()),
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
                 // itemCount: filteredList.length,
-                itemCount: pokemonListCount,
+                itemCount: filteredList.length,
                 itemBuilder: (context, index) {
                   return pokemonCard(
                     name: filteredList[index]["name"]["english"].toString(),
                     types: filteredList[index]["type"],
-                    id: filteredList[index]["id"],
-                    hires: filteredList[index]["hires"].toString(),
+                    pokemonId: filteredList[index]["id"],
+                    hires: filteredList[index]["thumbnail"].toString(),
                     primaryType: filteredList[index]["type"][0].toString(),
                   );
                 }),
@@ -164,17 +163,21 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ],
                   onSelected: (int index) {
-                    setState(() {
-                      filteredList = originalList;
-                      if (index == 0) {
-                        pokemonListCount = originalList.length;
-                      } else if (index == 1) {
-                        pokemonListCount = 151;
-                      } else if (index == 2) {
+                    if (index == 0) {
+                      setState(() {
+                        filteredList = pokemonList;
+                      });
+                    } else if (index == 1) {
+                      setState(() {
+                        filteredList = originalList;
+                        filteredList.removeRange(151, 809);
+                      });
+                    } else if (index == 2) {
+                      setState(() {
                         filteredList.skip(151).take(251);
-                        pokemonListCount = 100;
-                      }
-                    });
+                        // filteredList.removeRange(0, 151);
+                      });
+                    }
                     print('index is $index');
                   },
                 ),
@@ -257,36 +260,43 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             SafeArea(
-              child: Container(
-                child: Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(
-                        right: 15.0,
-                        left: 15.0,
-                        top: 15.0,
-                      ),
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Pokédex",
-                              style: TextStyle(
-                                fontSize: 26,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.red,
-                              ),
-                            ),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: 768.0,
+                  ),
+                  child: Container(
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(
+                            right: 15.0,
+                            left: 15.0,
+                            top: 15.0,
                           ),
-                          _pokemonListSearchBar(),
-                        ],
-                      ),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Pokédex",
+                                  style: TextStyle(
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w900,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                              _pokemonListSearchBar(),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: _pokemonList(),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: _pokemonList(),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -300,7 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
     required String name,
     required String primaryType,
     required List<dynamic> types,
-    required int id,
+    required int pokemonId,
     required String hires,
   }) {
     return Card(
@@ -323,8 +333,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    PokemonDetailPage(id - 1, pokemonList, typesList),
+                builder: (context) => PokemonDetailPage(pokemonId - 1, pokemonList, typesList),
               ),
             );
           },
@@ -387,8 +396,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               return Card(
                                 clipBehavior: Clip.antiAliasWithSaveLayer,
                                 shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                      color: Colors.transparent, width: 0),
+                                  side: const BorderSide(color: Colors.transparent, width: 0),
                                   borderRadius: BorderRadius.circular(50),
                                 ),
                                 elevation: 2,
@@ -425,7 +433,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 right: 15,
                 bottom: 25,
                 child: Text(
-                  "#" + id.toString().padLeft(3, '0'),
+                  "#" + pokemonId.toString().padLeft(3, '0'),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 32,
