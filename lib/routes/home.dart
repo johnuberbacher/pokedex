@@ -14,7 +14,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   List<dynamic> pokemonGlobalList = [];
   List<dynamic> pokemonList = [];
   List<dynamic> filteredList = [];
@@ -29,6 +29,20 @@ class _MyHomePageState extends State<MyHomePage> {
   int pokemonListCount = 0;
   ScrollController _pokemonListController = ScrollController();
   TextEditingController controller = TextEditingController(text: "");
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent, // Android System bar
+        statusBarBrightness: Brightness.light, // iOS System Bar
+        systemNavigationBarDividerColor:
+            Colors.black.withOpacity(0.075), // Android Navigation Bar Divider
+        systemNavigationBarColor: Colors.white, // Android Navigation Bar
+        systemNavigationBarIconBrightness: Brightness.dark, // Android Navigation Bar Icons
+      ));
+    }
+  }
 
   _fetchPokemonList() async {
     setState(() {
@@ -232,6 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
     _fetchPokemonList();
   }
 
