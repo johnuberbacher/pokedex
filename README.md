@@ -15,6 +15,9 @@ flutter pub get
 flutter run
 ```
 
+### Flutter-Web Demo
+https://fluter-pokedex.netlify.app
+
 ### To-Do
 - [x] ~~Finish textfield search functionality~~
 
